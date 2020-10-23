@@ -8,7 +8,7 @@
 
 #define SDA_IO 18
 #define SCL_IO 19
-#define MAX44009 0x4a
+#define MAX44009 0x4b
 #define REGISTER_ADDRESS 0x03
 
 double readLuxFromRegister();
@@ -52,7 +52,7 @@ double readLuxFromRegister()
   i2c_master_start(cmd);
   i2c_master_write_byte(cmd, (MAX44009 << 1) | I2C_MASTER_READ, true);
 
-  i2c_master_read_byte(cmd, &raw, I2C_MASTER_NACK);
+  i2c_master_read_byte(cmd, &raw, I2C_MASTER_ACK);
   i2c_master_stop(cmd);
   i2c_master_cmd_begin(0, cmd, 1000 / portTICK_RATE_MS);
   i2c_cmd_link_delete(cmd);
