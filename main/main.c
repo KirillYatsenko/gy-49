@@ -11,8 +11,8 @@
 #define MAX44009 0x4b
 #define REGISTER_ADDRESS 0x03
 
-double readLuxFromRegister();
-void readLux(void *args);
+void read_lux_task(void *args);
+double read_lux_i2c();
 
 void app_main(void)
 {
@@ -27,21 +27,21 @@ void app_main(void)
   i2c_param_config(I2C_NUM_0, &i2c_config);
   i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
 
-  xTaskCreate(&readLux, "readLux", 8000, NULL, 1, NULL);
+  xTaskCreate(&read_lux_task, "lux", 8000, NULL, 1, NULL);
 }
 
-void readLux(void *args)
+void read_lux_task(void *args)
 {
   while (true)
   {
-    double lux = readLuxFromRegister();
+    double lux = read_lux_i2c();
     printf("lux = %f\n", lux);
 
     vTaskDelay(2000 / portTICK_RATE_MS);
   }
 }
 
-double readLuxFromRegister()
+double read_lux_i2c()
 {
   uint8_t raw = 0;
 
